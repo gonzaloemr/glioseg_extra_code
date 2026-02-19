@@ -4,8 +4,10 @@
 # MNI152_CENTER = (0.01626615936029907, 21.274018629494194, 10.16421050446013)
 
 from pathlib import Path
-import SimpleITK as sitk
+
 import numpy as np
+import SimpleITK as sitk
+
 from scipy.spatial.transform import Rotation as R
 
 
@@ -35,17 +37,18 @@ def get_information_im(im_dir: str | Path, brain_mask_dir: str | Path):
     im_info["Direction"] = im_direction
 
     axcodes = orientation_filter.GetOrientationFromDirectionCosines(im_direction)
-    im_info["Orientation"] = ''.join(axcodes)
+    im_info["Orientation"] = "".join(axcodes)
 
     label_shape_filter.Execute(brain_mask_dir)
     center = label_shape_filter.GetCentroid(1)
     im_info["Center"] = center
 
     rot = R.from_matrix(np.array(im_direction).reshape(3, 3))
-    angles = rot.as_euler('XYZ', degrees=True)
+    angles = rot.as_euler("XYZ", degrees=True)
     im_info["Angles"] = angles
 
     return im_info
+
 
 if __name__ == "__main__":
 
@@ -64,7 +67,6 @@ if __name__ == "__main__":
     # mni152_atlas_t2 = Path(mni152_atlas_dir) / "Atlas_mni_icbm152_nonlinear_symmetric_2009a_T2.nii.gz"
     # mni152_atlas_brain_mask = Path(mni152_atlas_dir) / "Atlas_mask.nii.gz"
 
-
     sri_24_atlas_dir = "/gpfs/work1/0/prjs0971/glioseg/data/sri24_spm8/templates"
     sri24_atlas_t1 = Path(sri_24_atlas_dir) / "T1.nii"
     sri24_atlas_t2 = Path(sri_24_atlas_dir) / "T2.nii"
@@ -79,35 +81,31 @@ if __name__ == "__main__":
     sri24_t1_info = get_information_im(sri24_atlas_t1, sri24_atlas_brain_mask_t1)
     sri24_t2_info = get_information_im(sri24_atlas_t2, sri24_atlas_brain_mask_t2)
 
-
     print("MNI152 T1 info:")
     for key, value in mni152_t1_info.items():
         print(f"{key}: {value}")
-    print("-"*100)
+    print("-" * 100)
     print("MNI152 T2 info:")
     for key, value in mni152_t2_info.items():
         print(f"{key}: {value}")
-    print("-"*100)
+    print("-" * 100)
     print("SRI24 T1 info:")
     for key, value in sri24_t1_info.items():
         print(f"{key}: {value}")
-    print("-"*100)
+    print("-" * 100)
     print("SRI24 T2 info:")
     for key, value in sri24_t2_info.items():
         print(f"{key}: {value}")
-    print("-"*100)
-
+    print("-" * 100)
 
     # overlap_filter.Execute(sri24_atlas_brain_mask_t1_im, sri24_atlas_brain_mask_t2_im)
     # dice_score_brain_mask_t1_t2_sri = overlap_filter.GetDiceCoefficient()
     # print(f"Dice score between SRI24 T1 and T2 brain masks: {dice_score_brain_mask_t1_t2_sri}")
 
-
     # or_image_filter = sitk.OrImageFilter()
     # combined_sri24_brain_mask = or_image_filter.Execute(sri24_atlas_brain_mask_t1_im, sri24_atlas_brain_mask_t2_im)
     # sitk.WriteImage(combined_sri24_brain_mask, str(Path(sri_24_atlas_dir) / "SRI24_combined_brain_mask.nii.gz"))
 
-    
     # and_image_filter = sitk.AndImageFilter()
     # and_sri24_brain_mask = and_image_filter.Execute(sri24_atlas_brain_mask_t1_im, sri24_atlas_brain_mask_t2_im)
     # sitk.WriteImage(and_sri24_brain_mask, str(Path(sri_24_atlas_dir) / "SRI24_and_brain_mask.nii.gz"))
@@ -119,14 +117,12 @@ if __name__ == "__main__":
     # print(f"Dice score between SRI24 T1 brain mask and combined brain mask: {dice_score_t1_with_combined}")
     # print(f"Dice score between SRI24 T2 brain mask and combined brain mask: {dice_score_t2_with_combined}")
 
-
     # overlap_filter.Execute(sri24_atlas_brain_mask_t1_im, and_sri24_brain_mask)
     # dice_score_t1_with_and = overlap_filter.GetDiceCoefficient()
     # overlap_filter.Execute(sri24_atlas_brain_mask_t2_im, and_sri24_brain_mask)
     # dice_score_t2_with_and = overlap_filter.GetDiceCoefficient()
     # print(f"Dice score between SRI24 T1 brain mask and and brain mask: {dice_score_t1_with_and}")
     # print(f"Dice score between SRI24 T2 brain mask and and brain mask: {dice_score_t2_with_and}")
-
 
     # sri24_with_combined_info_t1 = get_information_im(sri24_atlas_t1, Path(sri_24_atlas_dir) / "SRI24_combined_brain_mask.nii.gz")
     # sri24_with_combined_info_t2 = get_information_im(sri24_atlas_t2, Path(sri_24_atlas_dir) / "SRI24_combined_brain_mask.nii.gz")
@@ -138,7 +134,6 @@ if __name__ == "__main__":
     # print("SRI24 T2 info with combined brain mask:")
     # for key, value in sri24_with_combined_info_t2.items():
     #     print(f"{key}: {value}")
-
 
     ########
 
@@ -177,13 +172,3 @@ if __name__ == "__main__":
     # for key, value in info_example_flair.items():
     #     print(f"{key}: {value}")
     # print("-"*100)
-    
-
-
-
-
-
-
-
-
-
